@@ -1,30 +1,10 @@
-# Doсker + Yii2 + MySql + phpMyAdmin
+# Docker + Yii2 Basic + MySql + phpMyAdmin
 
-Для начала необходимо клонировать репозиторий
-
-[https://github.com/yiisoft/yii2-docker](https://github.com/yiisoft/yii2-docker)
-
-После успешного клонирования переходим в папку `yii2-docker`
-
-```bash
-cd yii2-docker
-```
-
-В директории необходимо открыть файл `.env` с помощью редактора или используя редактор в консоли
-
-```bash
-nano .env
-```
-
-и поменять версию PHP на 8.1
-
-```bash
-HP_BASE_IMAGE_VERSION=8.1-apache
-```
+Для начала необходимо клонировать репозиторий [https://github.com/yiisoft/yii2-app-basic](https://github.com/yiisoft/yii2-app-basic)
 
 Для добавления mysql и phpMyAdmin добавить следующий код в `docker-compose.yml`
 
-```bash
+```yaml
 db:
     image: mysql:8.0
     restart: always
@@ -41,7 +21,7 @@ db:
       - "./docker/mysql:/var/lib/mysql"
     networks:
       - default
-  phpmyadmin:
+phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
       - '8888:80'
@@ -51,14 +31,14 @@ db:
     depends_on:
       - db
 ```
+<details>
+    <summary>Таким образом, полный файл `docker-compose.yml` будет выглядеть примерно так (спойлер):</summary>
 
-Таким образом, полный файл `docker-compose.yml` будет выглядеть так:
-
-```bash
+```yaml
 version: '2'
 services:
   php:
-    image: yiisoftware/yii2-php:8.1-apache
+    image: yiisoftware/yii2-php:8.2-apache
     volumes:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       - ./:/app:delegated
@@ -90,32 +70,33 @@ services:
     depends_on:
       - db
 ```
+</details>
 
-Запустить Docker если он не запущен и выполнить команду
-
-```bash
-docker-compose build
-```
-
-После чего будут установлены контейнеры
-
-После необходимо установить зависимости командой
+Информацию о доступных образах c различными веб-серверами и версиями PHP можно почерпнуть [тут](https://github.com/yiisoft/yii2-docker/#available-versions-for-yiisoftwareyii2-php)
+Чтобы данная инсталляция смогла нормально работать под Linux, возможно, придется дополнительно установить разрешающие права на папки:
 
 ```bash
-docker-compose run --rm php composer update --prefer-dist
+chmod -R 777 web/assets
+chmod -R 777 runtime
 ```
 
-И запустить скрипты (postInstall)
+В конфигурационном файле Yii2 прописываем соответствующие параметры подключения к базе данных из `docker-compose.yml`,
+в качестве имени хоста сервера базы используя имя сервиса: "db".
 
-```bash
-docker-compose run --rm php composer install    
-```
+Затем действуем по [инструкции](https://github.com/yiisoft/yii2-app-basic#install-with-docker):
 
-После этого запускаем контейнеры
+Update your vendor packages
 
-```bash
-docker-compose up -d
-```
+    docker-compose run --rm php composer update --prefer-dist
+
+Run the installation triggers (creating cookie validation code)
+
+    docker-compose run --rm php composer install    
+
+Start the container
+
+    docker-compose up -d
+
 
 В результате сайт будет доступен по адресу [http://localhost:8000/](http://localhost:8000/)
 
