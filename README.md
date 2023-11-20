@@ -86,6 +86,8 @@ chmod -R 777 runtime
 
 Затем действуем по [инструкции](https://github.com/yiisoft/yii2-app-basic#install-with-docker):
 
+В этих командах "php" используется, как имя сооветствующего сервиса из `docker-compose.yml`. Это не вызов интерпретатора, как может показаться.
+
 Update your vendor packages
 
     docker-compose run --rm php composer update --prefer-dist
