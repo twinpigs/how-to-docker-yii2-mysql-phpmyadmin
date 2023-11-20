@@ -72,7 +72,7 @@ services:
 ```
 </details>
 
-Информацию о доступных образах c различными веб-серверами и версиями PHP можно почерпнуть [тут](https://github.com/yiisoft/yii2-docker/#available-versions-for-yiisoftwareyii2-php)
+Информацию о доступных образах Yii2 c различными веб-серверами и версиями PHP можно почерпнуть [тут](https://github.com/yiisoft/yii2-docker/#available-versions-for-yiisoftwareyii2-php)
 
 Чтобы данная инсталляция смогла нормально работать под Linux, возможно, придется дополнительно установить разрешающие права на папки:
 
